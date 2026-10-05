@@ -1,0 +1,18 @@
+# Build artifacts
+*.exe
+*.o
+*.obj
+*.out
+build/
+bin/
+
+# Generated images/output
+output/*
+!output/.gitkeep
+
+# VS Code local state
+.vscode/*.log
+
+# OS files
+.DS_Store
+Thumbs.db
