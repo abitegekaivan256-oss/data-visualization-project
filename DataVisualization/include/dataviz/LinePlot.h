@@ -29,3 +29,34 @@
 //
 // IMPLEMENTATION STATUS: NOT YET IMPLEMENTED
 // ============================================================================
+
+#ifndef LINE_PLOT_H
+#define LINE_PLOT_H
+
+#include <vector>
+#include "Plot.h"
+#include "AxisScale.h"
+#include "Renderer.h"
+
+namespace dataviz {
+
+class LinePlot : public Plot {
+private:
+    // Store the raw data points passed by the user
+    std::vector<double> x_values_;
+    std::vector<double> y_values_;
+
+public:
+    LinePlot();
+    virtual ~LinePlot() = default;
+
+    // Save the coordinate lists for plotting
+    void setData(const std::vector<double>& x, const std::vector<double>& y);
+
+    // Map data points using AxisScale and draw lines between them using Renderer
+    void render(Renderer& renderer, const AxisScale& xScale, const AxisScale& yScale) const override;
+};
+
+} // namespace dataviz
+
+#endif // LINE_PLOT_H
