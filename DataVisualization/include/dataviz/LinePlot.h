@@ -59,4 +59,4 @@ public:
 
 } // namespace dataviz
 
-#endif // LINE_PLOT_H
+#endif
