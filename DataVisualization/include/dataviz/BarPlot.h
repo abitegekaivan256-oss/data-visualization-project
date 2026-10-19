@@ -29,3 +29,44 @@
 //
 // IMPLEMENTATION STATUS: NOT YET IMPLEMENTED
 // ============================================================================
+#pragma once
+
+#include "dataviz/DataTypes.h"
+#include "dataviz/PlotOptions.h"
+#include "dataviz/AxisScale.h"
+#include "dataviz/Labels.h"
+#include "dataviz/Renderer.h"
+
+namespace dataviz {
+
+/**
+ * BarPlot draws a category/value series as vertical bars.
+ *
+ * Integration note:
+ * This module follows the workflow's intended dependencies. The group must
+ * agree the exact method names/signatures in AxisScale, Labels, Renderer and
+ * PlotOptions before merging. The method below uses the shared renderer's
+ * primitive operations (begin, line, rectangle, text, finish); see README.md
+ * for the proposed contract used by this implementation.
+ */
+class BarPlot {
+public:
+    /**
+     * Draw a vertical bar chart.
+     *
+     * @param series One category and one numeric value per bar.
+     * @param options Canvas size, margins, title, labels and colours.
+     * @param axis Shared value-axis scaler, responsible for value range and
+     *             conversion of values to drawing coordinates.
+     * @param labels Shared label helper for title, axes and category labels.
+     * @param renderer Shared renderer that draws primitives and exports SVG.
+     * @return true when the chart is drawn; false for invalid/empty input.
+     */
+    static bool draw(const CategorySeries& series,
+                     const PlotOptions& options,
+                     AxisScale& axis,
+                     Labels& labels,
+                     Renderer& renderer);
+};
+
+} // namespace dataviz

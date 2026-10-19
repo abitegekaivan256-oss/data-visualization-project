@@ -59,4 +59,8 @@ public:
 
 } // namespace dataviz
 
+<<<<<<< HEAD:DataVisualization/include/dataviz/LinePlot.hpp
 #endif // LINE_PLOT_H
+=======
+#endif
+>>>>>>> a498db3827be55900a1c7741d269354a2a77652f:DataVisualization/include/dataviz/LinePlot.h
