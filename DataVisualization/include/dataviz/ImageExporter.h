@@ -25,3 +25,49 @@
 //
 // IMPLEMENTATION STATUS: NOT YET IMPLEMENTED
 // ============================================================================
+#ifndef DATAVIZ_IMAGE_EXPORTER_H
+#define DATAVIZ_IMAGE_EXPORTER_H
+
+#include <string>
+
+namespace dataviz {
+
+class Renderer;
+
+class ExportStrategy {
+public:
+    virtual ~ExportStrategy() = default;
+
+    virtual bool exportPlot(
+        const Renderer& renderer,
+        const std::string& filename
+    ) = 0;
+};
+
+class SvgImageExporter : public ExportStrategy {
+private:
+    std::string lastError_;
+
+protected:
+    bool preparePath(const std::string& filename);
+
+public:
+    bool exportPlot(
+        const Renderer& renderer,
+        const std::string& filename
+    ) override;
+
+    const std::string& lastError() const;
+};
+
+class ImageExporter {
+public:
+    static bool exportSVG(
+        const Renderer& renderer,
+        const std::string& filename
+    );
+};
+
+} // namespace dataviz
+
+#endif

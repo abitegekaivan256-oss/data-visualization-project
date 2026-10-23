@@ -25,3 +25,73 @@
 //
 // IMPLEMENTATION STATUS: NOT YET IMPLEMENTED
 // ============================================================================
+
+
+#include "dataviz/ImageExporter.h"
+#include "dataviz/Renderer.h"
+
+#include <string>
+#include <exception>
+
+namespace dataviz {
+
+// Validate the output filename.
+bool SvgImageExporter::preparePath(
+    const std::string& filename
+) {
+    if (filename.empty()) {
+        lastError_ = "Filename cannot be empty";
+        return false;
+    }
+
+    // Check whether filename ends with .svg
+    if (filename.length() < 5 ||
+        filename.substr(filename.length() - 4) != ".svg") {
+        lastError_ = "Only SVG files are supported";
+        return false;
+    }
+
+    return true;
+}
+
+// Runtime polymorphism through overriding.
+bool SvgImageExporter::exportPlot(
+    const Renderer& renderer,
+    const std::string& filename
+) {
+    lastError_.clear();
+
+    try {
+        if (!preparePath(filename)) {
+            return false;
+        }
+
+        // Use Adrian's existing rendering function.
+        if (!renderer.saveSVG(filename)) {
+            lastError_ = "Failed to save SVG file. Check the output path.";
+            return false;
+        }
+
+        return true;
+
+    } catch (const std::exception& e) {
+        lastError_ = e.what();
+        return false;
+    }
+}
+
+// Encapsulation: controlled access to private data.
+const std::string& SvgImageExporter::lastError() const {
+    return lastError_;
+}
+
+// Convenient interface for the rest of the project.
+bool ImageExporter::exportSVG(
+    const Renderer& renderer,
+    const std::string& filename
+) {
+    SvgImageExporter exporter;
+    return exporter.exportPlot(renderer, filename);
+}
+
+} // namespace dataviz
