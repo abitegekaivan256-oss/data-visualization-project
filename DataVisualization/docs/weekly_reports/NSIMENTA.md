@@ -9,4 +9,4 @@ I created the LinePlot.cpp file to contain the implementation of the functions d
 By the end of this week, I had updated the header file to LinePlot.hpp and created the LinePlot.cpp implementation file. These files provide the initial structure for the Line Plot module.
 At the beginning, I encountered an issue with the header file extension. I addressed this by changing the filename from .h to .hpp.
 In the coming week, I plan to continue developing the tets module, review the implementation, and work on the remaining functionality required for plotting graphs.
-This week's progress focused on organizing the Line Plot module's files and establishing its basic structure. The header file has been renamed to LinePlot.hpp, and the implementation file, LinePlot.cpp, has been created. This provides a foundation for the next stage of development.
+This week's progress focused on organizing the Line Plot module's files and establishing its basic structure. The header file has been renamed to LinePlot.hpp, and the implementation file, LinePlot.cpp, has been created. This provides a foundation for the next stage of development.git
