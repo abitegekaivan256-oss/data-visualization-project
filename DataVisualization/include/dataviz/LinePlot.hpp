@@ -1,62 +1,47 @@
-// ============================================================================
-// DATA VISUALIZATION LIBRARY IN C++
-//
-// MODULE: LINE PLOT
-// ASSIGNED TO: SANDRA
-//
-// YOUR RESPONSIBILITIES:
-// 1. Accept ordered x and y datasets.
-// 2. Use AxisScale to map data to plot coordinates.
-// 3. Connect consecutive points.
-// 4. Pass drawing requirements to Renderer.
-//
-// MAIN FILES:
-// - include/dataviz/LinePlot.h
-// - src/LinePlot.cpp
-// - tests/test_line.cpp
-//
-// DEPENDENCIES / COORDINATION:
-// - AxisScale (Bonius)
-// - Renderer (Adrian + Group)
-// - Plot (Group)
-//
-// TEAM RULES:
-// - Work mainly in your allocated files.
-// - Pull the latest repository before starting work.
-// - Discuss changes to shared interfaces before editing them.
-// - Compile/test your component before committing.
-// - Use a clear commit message describing what changed.
-//
-// IMPLEMENTATION STATUS: NOT YET IMPLEMENTED
-// ============================================================================
+#ifndef DATAVIZ_LINEPLOT_HPP
+#define DATAVIZ_LINEPLOT_HPP
 
-#ifndef LINE_PLOT_H
-#define LINE_PLOT_H
-
+#include <cstddef>
+#include <string>
 #include <vector>
-#include "Plot.h"
-#include "AxisScale.h"
-#include "Renderer.h"
 
 namespace dataviz {
 
-class LinePlot : public Plot {
+struct Point {
+    double x;
+    double y;
+};
+
+struct LineSegment {
+    Point start;
+    Point end;
+};
+
+// Standalone component until the team defines Plot/AxisScale/Renderer interfaces.
+class LinePlot {
+public:
+    LinePlot() = default;
+    LinePlot(const std::vector<double>& x, const std::vector<double>& y);
+
+    // Throws std::invalid_argument on mismatched sizes or non-finite values.
+    void setData(const std::vector<double>& x, const std::vector<double>& y);
+    void setTitle(const std::string& title);
+    void setXLabel(const std::string& label);
+    void setYLabel(const std::string& label);
+
+    std::size_t size() const noexcept;
+    std::vector<LineSegment> segments() const;
+    // Saves a genuine SVG line plot; throws std::runtime_error on file errors.
+    void saveSvg(const std::string& filename, unsigned width = 800,
+                 unsigned height = 500) const;
+
 private:
-    // Store the raw data points passed by the user
     std::vector<double> x_values_;
     std::vector<double> y_values_;
-
-public:
-    LinePlot();
-    virtual ~LinePlot() = default;
-
-    // Save the coordinate lists for plotting
-    void setData(const std::vector<double>& x, const std::vector<double>& y);
-
-    // Map data points using AxisScale and draw lines between them using Renderer
-    void render(Renderer& renderer, const AxisScale& xScale, const AxisScale& yScale) const override;
+    std::string title_ = "Line Plot";
+    std::string x_label_ = "X";
+    std::string y_label_ = "Y";
 };
 
 } // namespace dataviz
-
-#endif // LINE_PLOT_H
+#endif

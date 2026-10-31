@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500">
+<rect width="100%" height="100%" fill="white"/>
+<g stroke="#dbe4ec" stroke-width="1">
+<line x1="75.000" y1="65.000" x2="75.000" y2="435.000"/>
+<line x1="75.000" y1="65.000" x2="775.000" y2="65.000"/>
+<line x1="215.000" y1="65.000" x2="215.000" y2="435.000"/>
+<line x1="75.000" y1="139.000" x2="775.000" y2="139.000"/>
+<line x1="355.000" y1="65.000" x2="355.000" y2="435.000"/>
+<line x1="75.000" y1="213.000" x2="775.000" y2="213.000"/>
+<line x1="495.000" y1="65.000" x2="495.000" y2="435.000"/>
+<line x1="75.000" y1="287.000" x2="775.000" y2="287.000"/>
+<line x1="635.000" y1="65.000" x2="635.000" y2="435.000"/>
+<line x1="75.000" y1="361.000" x2="775.000" y2="361.000"/>
+<line x1="775.000" y1="65.000" x2="775.000" y2="435.000"/>
+<line x1="75.000" y1="435.000" x2="775.000" y2="435.000"/>
+</g>
+<path d="M 75.000 65.000 V 435.000 H 775.000" fill="none" stroke="#334155" stroke-width="2"/>
+<g font-family="Arial,sans-serif" fill="#334155" font-size="12">
+<text x="75.000" y="455.000" text-anchor="middle">0.000</text>
+<text x="65.000" y="439.000" text-anchor="end">1.000</text>
+<text x="215.000" y="455.000" text-anchor="middle">0.600</text>
+<text x="65.000" y="365.000" text-anchor="end">1.800</text>
+<text x="355.000" y="455.000" text-anchor="middle">1.200</text>
+<text x="65.000" y="291.000" text-anchor="end">2.600</text>
+<text x="495.000" y="455.000" text-anchor="middle">1.800</text>
+<text x="65.000" y="217.000" text-anchor="end">3.400</text>
+<text x="635.000" y="455.000" text-anchor="middle">2.400</text>
+<text x="65.000" y="143.000" text-anchor="end">4.200</text>
+<text x="775.000" y="455.000" text-anchor="middle">3.000</text>
+<text x="65.000" y="69.000" text-anchor="end">5.000</text>
+</g>
+<g font-family="Arial,sans-serif" fill="#0f172a">
+<text x="400" y="30" text-anchor="middle" font-size="20" font-weight="bold">Revenue &amp; Profit &lt;2026&gt;</text>
+<text x="400" y="485" text-anchor="middle" font-size="14">Time</text>
+<text transform="translate(20 250) rotate(-90)" text-anchor="middle" font-size="14">USD</text>
+</g>
+<polyline fill="none" stroke="#2563eb" stroke-width="2.5" points="75.000,435.000 308.333,250.000 541.667,342.500 775.000,65.000 "/>
+<circle cx="75.000" cy="435.000" r="3.5" fill="#2563eb"/>
+<circle cx="308.333" cy="250.000" r="3.5" fill="#2563eb"/>
+<circle cx="541.667" cy="342.500" r="3.5" fill="#2563eb"/>
+<circle cx="775.000" cy="65.000" r="3.5" fill="#2563eb"/>
+</svg>
