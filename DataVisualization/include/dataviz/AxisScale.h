@@ -29,3 +29,50 @@
 //
 // IMPLEMENTATION STATUS: NOT YET IMPLEMENTED
 // ============================================================================
+
+#ifndef DATAVIZ_AXIS_SCALE_H
+#define DATAVIZ_AXIS_SCALE_H
+
+namespace dataviz {
+
+// Abstract base class
+class AxisScale {
+private:
+    double minValue;
+    double maxValue;
+
+public:
+    AxisScale(double min, double max);
+
+    double getMin() const;
+    double getMax() const;
+
+    void setRange(double min, double max);
+
+    virtual double scale(double value) const = 0;
+
+    virtual ~AxisScale() {}
+};
+
+// Derived class: LinearScale
+class LinearScale : public AxisScale {
+private:
+    double screenWidth;
+
+public:
+    LinearScale(double min, double max, double width);
+
+    double scale(double value) const override;
+};
+
+// Derived class: PercentageScale
+class PercentageScale : public AxisScale {
+public:
+    PercentageScale(double min, double max);
+
+    double scale(double value) const override;
+};
+
+}
+
+#endif
