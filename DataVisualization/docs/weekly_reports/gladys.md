@@ -1,5 +1,5 @@
 
-
+ 
 ## 1. Introduction
 
 During Week 2, I reviewed my assigned responsibilities in the Data Visualization Library project, focusing on the Data Preprocessing module. My role is to ensure that data loaded into the program is validated, cleaned, and prepared for statistical analysis and plotting.
