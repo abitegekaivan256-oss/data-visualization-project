@@ -478,30 +478,3 @@ The project also provided an opportunity to explore important programming concep
 
 Overall, my contribution establishes a foundation for preparing and analyzing numerical datasets before visualization. Further testing and integration with the remaining group modules will be necessary to confirm the reliability of the complete system.
 
-# APPENDIX A: SOURCE CODE
-
-The following source files should accompany this report where they are present in the final repository:
-
-- Data Preprocessing implementation.
-- Statistical Analysis implementation.
-- `templates.cpp` — template-based statistical calculations.
-- Statistical Analysis test program.
-- Data Preprocessing test program.
-
-# APPENDIX B: PROGRAM OUTPUT
-
-Include terminal screenshots showing:
-
-1. Successful compilation of the Statistical Analysis program.
-2. Results for the integer dataset.
-3. Results for the decimal dataset.
-4. Any additional preprocessing tests performed.
-
-# APPENDIX C: MODULE INTEGRATION
-
-Include evidence showing how the Data Preprocessing and Statistical Analysis modules interact with the other components of the Data Visualization Library.
-
-# APPENDIX D: OBJECT-ORIENTED PROGRAMMING
-
-Include any implemented class or struct diagrams, along with source code demonstrating encapsulation, inheritance, or runtime polymorphism where applicable.
-
