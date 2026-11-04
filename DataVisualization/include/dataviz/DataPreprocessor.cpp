@@ -48,7 +48,8 @@ public:
 };
 
 // Derived class 2
-class InvalidValuePreprocessor : public DataPreprocessor {
+class InvalidValuePreprocessor : public DataPreprocessor 
+{
 
 public:
     void preprocessData() override 
