@@ -57,11 +57,13 @@ double range(T data[], int n) {
 
 // Function to calculate variance
 template <typename T>
-double variance(T data[], int n) {
+double variance(T data[], int n) 
+{
     double average = mean(data, n);
     double total = 0;
 
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < n; i++) 
+    {
         double difference = data[i] - average;
         total = total + difference * difference;
     }

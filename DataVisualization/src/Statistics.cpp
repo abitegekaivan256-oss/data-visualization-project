@@ -31,11 +31,13 @@ double minimum(double data[], int n) {
 }
 
 // Find maximum
-double maximum(double data[], int n) {
+double maximum(double data[], int n) 
+{
     double maxValue = data[0];
 
     for (int i = 1; i < n; i++) {
-        if (data[i] > maxValue) {
+        if (data[i] > maxValue) 
+        {
             maxValue = data[i];
         }
     }

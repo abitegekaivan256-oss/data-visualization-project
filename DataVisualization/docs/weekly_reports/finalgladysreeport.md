@@ -1,7 +1,5 @@
 FINAL REPORT
-
 # 1. INTRODUCTION
-
 The Data Visualization Library is a C++ programming project developed to process, analyze, and visualize numerical datasets.
 
 The project involves several interconnected modules, including Data Loading, Data Preprocessing, Statistical Analysis, Axis Scaling, Plot Generation, Rendering, Labels and Annotations, and Image Export.
