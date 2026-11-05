@@ -29,3 +29,22 @@
 //
 // IMPLEMENTATION STATUS: NOT YET IMPLEMENTED
 // ============================================================================
+
+
+//axis scaling implementation
+#include "dataviz/AxisScale.h"
+#include <stdexcept>
+
+AxisScale::AxisScale(double dMin, double dMax, double pMin, double pMax) 
+    : dataMin(dMin), dataMax(dMax), plotMin(pMin), plotMax(pMax) {
+    if (dMin == dMax) {
+        this->dataMax += 1.0; // Prevent division by zero
+    }
+}
+
+double AxisScale::scale(double value) const {
+    if (value < dataMin) value = dataMin;
+    if (value > dataMax) value = dataMax;
+    
+    return plotMin + (value - dataMin) * (plotMax - plotMin) / (dataMax - dataMin);
+}
