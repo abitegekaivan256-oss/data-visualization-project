@@ -29,7 +29,7 @@
 #ifndef PLOT_H
 #define PLOT_H
 
-#include <string>
+#include <string>      
 #include "dataviz/AxisScale.h"
 
 class Plot {
@@ -43,6 +43,12 @@ protected:
 public:
     Plot(const std::string& plotTitle);
     virtual ~Plot() = default;
+
+    // Pure virtual method: forces subclasses to implement rendering
+    virtual void render() const = 0;
+
+    // Optional virtual hook for exports
+    virtual void exportData() const {}
 
     // Common member functions inherited by all plot subclasses
     void setAxisLabels(const std::string& xLabel, const std::string& yLabel);

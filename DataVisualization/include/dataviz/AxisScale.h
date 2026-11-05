@@ -30,40 +30,15 @@
 // IMPLEMENTATION STATUS: NOT YET IMPLEMENTED
 // ============================================================================
 
-<<<<<<< HEAD
 // AxisScale is a utility class that provides scaling functionality for data visualization. It maps data values to pixel coordinates based on the specified data range and plot range. This class is designed to be used by various plot types, including scatter plots, line plots, and bar plots.
 #ifndef AXIS_SCALE_H
 #define AXIS_SCALE_H
 
-#include <vector>
-#include <utility>
+#include <stdexcept>
+#include <cmath>
 
-class AxisScale {
-private:
-    double dataMin;
-    double dataMax;
-    double plotMin;
-    double plotMax;
+namespace dataviz { // <--- [ADDED IN WEEK 2/3] Namespace encapsulation
 
-public:
-    AxisScale(double dMin, double dMax, double pMin, double pMax);
-
-    // Normalize data value to pixel/coordinate space [pMin, pMax]
-    double scale(double value) const;
-
-    // Getters
-    double getDataMin() const { return dataMin; }
-    double getDataMax() const { return dataMax; }
-};
-
-#endif // AXIS_SCALE_H
-=======
-#ifndef DATAVIZ_AXIS_SCALE_H
-#define DATAVIZ_AXIS_SCALE_H
-
-namespace dataviz {
-
-// Abstract base class
 class AxisScale {
 private:
     double minValue;
@@ -71,37 +46,33 @@ private:
 
 public:
     AxisScale(double min, double max);
+    virtual ~AxisScale() = default; // <--- [ADDED] Safe virtual destructor for polymorphism
 
     double getMin() const;
     double getMax() const;
-
     void setRange(double min, double max);
 
-    virtual double scale(double value) const = 0;
-
-    virtual ~AxisScale() {}
+    // [ADDED IN WEEK 3] Pure virtual function making this an abstract interface
+    virtual double scale(double value) const = 0; 
 };
 
-// Derived class: LinearScale
+// [ADDED IN WEEK 2/3] Concrete derived class for terminal/screen rendering
 class LinearScale : public AxisScale {
 private:
     double screenWidth;
 
 public:
     LinearScale(double min, double max, double width);
-
     double scale(double value) const override;
 };
 
-// Derived class: PercentageScale
+// [ADDED IN WEEK 2/3] Concrete derived class for percentage-based scaling
 class PercentageScale : public AxisScale {
 public:
     PercentageScale(double min, double max);
-
     double scale(double value) const override;
 };
 
-}
+} // namespace dataviz
 
-#endif
->>>>>>> origin/main
+#endif // AXIS_SCALE_H

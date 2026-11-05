@@ -32,76 +32,48 @@
 
 #include "dataviz/AxisScale.h"
 
-#include <stdexcept>
-#include <cmath>
-
 namespace dataviz {
 
 // BASE CLASS
-
 AxisScale::AxisScale(double min, double max) {
     setRange(min, max);
 }
 
-double AxisScale::getMin() const {
-    return minValue;
-}
-
-double AxisScale::getMax() const {
-    return maxValue;
-}
+double AxisScale::getMin() const { return minValue; }
+double AxisScale::getMax() const { return maxValue; }
 
 void AxisScale::setRange(double min, double max) {
-    if (!std::isfinite(min) ||
-        !std::isfinite(max) ||
-        min > max) {
+    // [ADDED IN WEEK 2/3] Robust error checking and safety validation
+    if (!std::isfinite(min) || !std::isfinite(max) || min > max) {
         throw std::invalid_argument("Invalid data range");
     }
-
     minValue = min;
     maxValue = max;
 }
 
-// LINEAR SCALE
-
-LinearScale::LinearScale(
-    double min, double max, double width)
-    : AxisScale(min, max), screenWidth(width)
-{
+// LINEAR SCALE IMPLEMENTATION
+LinearScale::LinearScale(double min, double max, double width)
+    : AxisScale(min, max), screenWidth(width) {
     if (!std::isfinite(width) || width <= 0) {
         throw std::invalid_argument("Invalid screen width");
     }
 }
 
 double LinearScale::scale(double value) const {
-    if (!std::isfinite(value)) {
-        throw std::invalid_argument("Invalid data value");
-    }
-
-    if (getMin() == getMax()) {
-        return screenWidth / 2.0;
-    }
-
-    return ((value - getMin()) /
-            (getMax() - getMin())) * screenWidth;
+    if (!std::isfinite(value)) throw std::invalid_argument("Invalid value");
+    if (getMin() == getMax()) return screenWidth / 2.0;
+    
+    return ((value - getMin()) / (getMax() - getMin())) * screenWidth;
 }
 
-// PERCENTAGE SCALE
-
-PercentageScale::PercentageScale(double min, double max)
-    : AxisScale(min, max) {}
+// PERCENTAGE SCALE IMPLEMENTATION
+PercentageScale::PercentageScale(double min, double max) : AxisScale(min, max) {}
 
 double PercentageScale::scale(double value) const {
-    if (!std::isfinite(value)) {
-        throw std::invalid_argument("Invalid data value");
-    }
+    if (!std::isfinite(value)) throw std::invalid_argument("Invalid value");
+    if (getMin() == getMax()) return 50.0;
 
-    if (getMin() == getMax()) {
-        return 50.0;
-    }
-
-    return ((value - getMin()) /
-            (getMax() - getMin())) * 100.0;
+    return ((value - getMin()) / (getMax() - getMin())) * 100.0;
 }
 
-}
+} // namespace dataviz
