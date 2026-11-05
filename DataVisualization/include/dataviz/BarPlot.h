@@ -35,6 +35,7 @@
 #include <string>
 #include <vector>
 #include "dataviz/AxisScale.h"
+#include "dataviz/Plot.h"
 
 
 
@@ -48,13 +49,13 @@
  * primitive operations (begin, line, rectangle, text, finish); see README.md
  * for the proposed contract used by this implementation.
  */
-class BarPlot {
+class BarPlot : public Plot {
 private:
-    std::string title;
     std::vector<std::string> categories;
     std::vector<double> values;
 
 public:
+// Constructor to initialize the bar plot with a title
     BarPlot(const std::string& plotTitle);
 
     void addBar(const std::string& category, double value);

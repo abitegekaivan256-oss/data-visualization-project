@@ -25,3 +25,33 @@
 //
 // IMPLEMENTATION STATUS: NOT YET IMPLEMENTED
 // ============================================================================
+
+#ifndef PLOT_H
+#define PLOT_H
+
+#include <string>
+#include "dataviz/AxisScale.h"
+
+class Plot {
+protected:
+    std::string title;
+    std::string xAxisLabel;
+    std::string yAxisLabel;
+    AxisScale xScale;
+    AxisScale yScale;
+
+public:
+    Plot(const std::string& plotTitle);
+    virtual ~Plot() = default;
+
+    // Common member functions inherited by all plot subclasses
+    void setAxisLabels(const std::string& xLabel, const std::string& yLabel);
+    void setXScale(double dMin, double dMax, double pMin, double pMax);
+    void setYScale(double dMin, double dMax, double pMin, double pMax);
+
+    std::string getTitle() const { return title; }
+    std::string getXAxisLabel() const { return xAxisLabel; }
+    std::string getYAxisLabel() const { return yAxisLabel; }
+};
+
+#endif // PLOT_H

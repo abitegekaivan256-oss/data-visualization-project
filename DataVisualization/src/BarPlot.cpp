@@ -36,7 +36,7 @@
 #include <algorithm>
 #include <iomanip> //
 
-BarPlot::BarPlot(const std::string& plotTitle) : title(plotTitle) {}
+BarPlot::BarPlot(const std::string& plotTitle) : Plot(plotTitle) {}
 
 void BarPlot::addBar(const std::string& category, double value) {
     categories.push_back(category);
