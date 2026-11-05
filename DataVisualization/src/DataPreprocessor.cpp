@@ -1,29 +1,17 @@
-// ============================================================================
-// DATA VISUALIZATION LIBRARY IN C++
-//
-// MODULE: DATA PREPROCESSING
-// ASSIGNED TO: GLADYS
-//
-// YOUR RESPONSIBILITIES:
-// 1. Validate loaded values.
-// 2. Handle missing or invalid values using the agreed policy.
-// 3. Prepare clean data for statistics and plotting.
-//
-// MAIN FILES:
-// - include/dataviz/DataPreprocessor.h
-// - src/DataPreprocessor.cpp
-// - tests/test_preprocessing.cpp
-//
-// DEPENDENCIES / COORDINATION:
-// - DataLoader (Jackson)
-// - Statistics (Gladys)
-//
-// TEAM RULES:
-// - Work mainly in your allocated files.
-// - Pull the latest repository before starting work.
-// - Discuss changes to shared interfaces before editing them.
-// - Compile/test your component before committing.
-// - Use a clear commit message describing what changed.
-//
-// IMPLEMENTATION STATUS: NOT YET IMPLEMENTED
-// ============================================================================
+#include "dataviz/DataPreprocessor.h"
+#include <cmath>
+#include <stdexcept>
+namespace dataviz {
+std::pair<std::vector<double>,std::vector<double>> DataPreprocessor::numericPairs(const DataSet& d,std::size_t x,std::size_t y,InvalidPolicy policy){
+if(x>=d.columnCount()||y>=d.columnCount()) throw std::out_of_range("Column index");
+std::pair<std::vector<double>,std::vector<double>> result;
+for(std::size_t i=0;i<d.rowCount();++i){
+try {
+double a=d.numericValue(i,x),b=d.numericValue(i,y);
+if(!std::isfinite(a)||!std::isfinite(b)) throw std::invalid_argument("Nonfinite data");
+result.first.push_back(a);result.second.push_back(b);
+} catch(const std::invalid_argument&){if(policy==InvalidPolicy::Reject) throw;}
+}
+return result;
+}
+}

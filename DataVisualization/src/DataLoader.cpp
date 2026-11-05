@@ -26,7 +26,6 @@
 // - Compile/test your component before committing.
 // - Use a clear commit message describing what changed.
 //
-// IMPLEMENTATION STATUS: NOT YET IMPLEMENTED
 // ============================================================================
 #include "dataviz/DataLoader.h"
 

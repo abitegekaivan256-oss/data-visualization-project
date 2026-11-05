@@ -27,7 +27,6 @@
 // - Compile/test your component before committing.
 // - Use a clear commit message describing what changed.
 //
-// IMPLEMENTATION STATUS: NOT YET IMPLEMENTED
 // ============================================================================
 #ifndef DATAVIZ_RENDERER_H
 #define DATAVIZ_RENDERER_H
@@ -46,11 +45,15 @@ class Renderer {
 public:
     Renderer(int width = 800, int height = 600);
 
+    int width()const{return width_;} int height()const{return height_;}
     void clear(const std::string& background = "white");
     void drawLine(double x1, double y1, double x2, double y2,
                   const std::string& color = "black", double strokeWidth = 2.0);
     void drawPoint(double x, double y, double radius = 4.0,
                    const std::string& color = "steelblue");
+    void drawOutlinedPoint(double x, double y, double radius,
+                           const std::string& fill, const std::string& outline,
+                           double outlineWidth);
     void drawRectangle(double x, double y, double width, double height,
                        const std::string& fill = "steelblue");
     void drawText(double x, double y, const std::string& text,
@@ -64,6 +67,9 @@ public:
                   const std::vector<double>& heights,
                   double baselineY, double barWidth,
                   const std::string& color = "steelblue");
+    void drawNumericTicks(double left, double top, double right, double bottom,
+                          double xmin, double xmax, double ymin, double ymax,
+                          bool includeX = true);
     bool saveSVG(const std::string& filename) const;
 
 private:

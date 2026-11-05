@@ -23,7 +23,6 @@
 // - Compile/test your component before committing.
 // - Use a clear commit message describing what changed.
 //
-// IMPLEMENTATION STATUS: NOT YET IMPLEMENTED
 // ============================================================================
 #ifndef DATAVIZ_IMAGE_EXPORTER_H
 #define DATAVIZ_IMAGE_EXPORTER_H
