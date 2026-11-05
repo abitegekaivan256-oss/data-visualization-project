@@ -29,56 +29,99 @@
 //
 // IMPLEMENTATION STATUS: NOT YET IMPLEMENTED
 // ============================================================================
+// ============================================================
+// DATA VISUALIZATION LIBRARY IN C++
+// MODULE: SCATTER PLOT
+// ASSIGNED TO: ADRIAN
+//
+// DEPENDENCIES:
+// AxisScale - coordinate transformation
+// Renderer  - drawing and SVG export
+// ============================================================
+
 #include "dataviz/ScatterPlot.h"
+#include "dataviz/AxisScale.h"
+
 #include <iostream>
-#include <algorithm>
+#include <vector>
+#include <stdexcept>
+#include <cmath>
 
-ScatterPlot::ScatterPlot(const std::string& plotTitle, char marker)
-    : Plot(plotTitle), pointMarker(marker) {}
+using namespace std;
 
-void ScatterPlot::addPoint(double x, double y) {
-    points.push_back({x, y});
+namespace dataviz {
+
+ScatterPlot::ScatterPlot(
+    const vector<double>& x,
+    const vector<double>& y)
+{
+    if (x.empty() || y.empty()) {
+        throw invalid_argument("Data cannot be empty");
+    }
+
+    if (x.size() != y.size()) {
+        throw invalid_argument("Data sizes must match");
+    }
+
+    for (int i = 0; i < (int)x.size(); i++) {
+        if (!isfinite(x[i]) || !isfinite(y[i])) {
+            throw invalid_argument("Invalid data value");
+        }
+    }
+
+    xValues = x;
+    yValues = y;
 }
 
-void ScatterPlot::renderAscii(int gridWidth, int gridHeight) const {
-    std::cout << "\n========================================\n";
-    std::cout << " SCATTER PLOT: " << title << "\n";
-    std::cout << " X: " << xAxisLabel << " | Y: " << yAxisLabel << "\n";
-    std::cout << "========================================\n";
-
-    if (points.empty()) {
-        std::cout << "[No points to plot]\n";
-        return;
-    }
-
-    // Determine data bounds
-    double minX = points[0].first, maxX = points[0].first;
-    double minY = points[0].second, maxY = points[0].second;
-
-    for (const auto& p : points) {
-        minX = std::min(minX, p.first);
-        maxX = std::max(maxX, p.first);
-        minY = std::min(minY, p.second);
-        maxY = std::max(maxY, p.second);
-    }
-
-    AxisScale scaleX(minX, maxX, 0, gridWidth - 1);
-    AxisScale scaleY(minY, maxY, 0, gridHeight - 1);
-
-    // Grid buffer initialization
-    std::vector<std::string> grid(gridHeight, std::string(gridWidth, ' '));
-
-    for (const auto& p : points) {
-        int xPos = static_cast<int>(scaleX.scale(p.first));
-        int yPos = static_cast<int>(scaleY.scale(p.second));
-        // Flip Y for terminal rendering top-to-bottom
-        int invertedY = (gridHeight - 1) - yPos;
-        grid[invertedY][xPos] = pointMarker;
-    }
-
-    // Render grid
-    for (int r = 0; r < gridHeight; ++r) {
-        std::cout << "|" << grid[r] << "|\n";
-    }
-    std::cout << "+" << std::string(gridWidth, '-') << "+\n";
+size_t ScatterPlot::pointCount() const {
+    return xValues.size();
 }
+
+void ScatterPlot::draw(Renderer& renderer) const {
+
+    double minX = xValues[0];
+    double maxX = xValues[0];
+    double minY = yValues[0];
+    double maxY = yValues[0];
+
+    // Find minimum and maximum values
+    for (int i = 0; i < (int)xValues.size(); i++) {
+
+        if (xValues[i] < minX)
+            minX = xValues[i];
+
+        if (xValues[i] > maxX)
+            maxX = xValues[i];
+
+        if (yValues[i] < minY)
+            minY = yValues[i];
+
+        if (yValues[i] > maxY)
+            maxY = yValues[i];
+    }
+
+    // Plot area
+    double left = 80;
+    double right = 740;
+    double top = 60;
+    double bottom = 520;
+
+    // Scale the data
+    LinearScale xScale(minX, maxX, right - left);
+    LinearScale yScale(minY, maxY, bottom - top);
+
+    // Draw axes
+    renderer.drawAxes(left, top, right, bottom);
+
+    // Draw the points
+    for (int i = 0; i < (int)xValues.size(); i++) {
+
+        double x = left + xScale.scale(xValues[i]);
+        double y = bottom - yScale.scale(yValues[i]);
+
+        renderer.drawPoint(x, y, 4, "blue");
+    }
+}
+
+}
+>>>>>>> origin/main

@@ -30,6 +30,7 @@
 // IMPLEMENTATION STATUS: NOT YET IMPLEMENTED
 // ============================================================================
 
+<<<<<<< HEAD
 // AxisScale is a utility class that provides scaling functionality for data visualization. It maps data values to pixel coordinates based on the specified data range and plot range. This class is designed to be used by various plot types, including scatter plots, line plots, and bar plots.
 #ifndef AXIS_SCALE_H
 #define AXIS_SCALE_H
@@ -56,3 +57,51 @@ public:
 };
 
 #endif // AXIS_SCALE_H
+=======
+#ifndef DATAVIZ_AXIS_SCALE_H
+#define DATAVIZ_AXIS_SCALE_H
+
+namespace dataviz {
+
+// Abstract base class
+class AxisScale {
+private:
+    double minValue;
+    double maxValue;
+
+public:
+    AxisScale(double min, double max);
+
+    double getMin() const;
+    double getMax() const;
+
+    void setRange(double min, double max);
+
+    virtual double scale(double value) const = 0;
+
+    virtual ~AxisScale() {}
+};
+
+// Derived class: LinearScale
+class LinearScale : public AxisScale {
+private:
+    double screenWidth;
+
+public:
+    LinearScale(double min, double max, double width);
+
+    double scale(double value) const override;
+};
+
+// Derived class: PercentageScale
+class PercentageScale : public AxisScale {
+public:
+    PercentageScale(double min, double max);
+
+    double scale(double value) const override;
+};
+
+}
+
+#endif
+>>>>>>> origin/main

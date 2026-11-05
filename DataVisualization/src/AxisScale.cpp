@@ -30,21 +30,78 @@
 // IMPLEMENTATION STATUS: NOT YET IMPLEMENTED
 // ============================================================================
 
-
-//axis scaling implementation
 #include "dataviz/AxisScale.h"
-#include <stdexcept>
 
-AxisScale::AxisScale(double dMin, double dMax, double pMin, double pMax) 
-    : dataMin(dMin), dataMax(dMax), plotMin(pMin), plotMax(pMax) {
-    if (dMin == dMax) {
-        this->dataMax += 1.0; // Prevent division by zero
+#include <stdexcept>
+#include <cmath>
+
+namespace dataviz {
+
+// BASE CLASS
+
+AxisScale::AxisScale(double min, double max) {
+    setRange(min, max);
+}
+
+double AxisScale::getMin() const {
+    return minValue;
+}
+
+double AxisScale::getMax() const {
+    return maxValue;
+}
+
+void AxisScale::setRange(double min, double max) {
+    if (!std::isfinite(min) ||
+        !std::isfinite(max) ||
+        min > max) {
+        throw std::invalid_argument("Invalid data range");
+    }
+
+    minValue = min;
+    maxValue = max;
+}
+
+// LINEAR SCALE
+
+LinearScale::LinearScale(
+    double min, double max, double width)
+    : AxisScale(min, max), screenWidth(width)
+{
+    if (!std::isfinite(width) || width <= 0) {
+        throw std::invalid_argument("Invalid screen width");
     }
 }
 
-double AxisScale::scale(double value) const {
-    if (value < dataMin) value = dataMin;
-    if (value > dataMax) value = dataMax;
-    
-    return plotMin + (value - dataMin) * (plotMax - plotMin) / (dataMax - dataMin);
+double LinearScale::scale(double value) const {
+    if (!std::isfinite(value)) {
+        throw std::invalid_argument("Invalid data value");
+    }
+
+    if (getMin() == getMax()) {
+        return screenWidth / 2.0;
+    }
+
+    return ((value - getMin()) /
+            (getMax() - getMin())) * screenWidth;
+}
+
+// PERCENTAGE SCALE
+
+PercentageScale::PercentageScale(double min, double max)
+    : AxisScale(min, max) {}
+
+double PercentageScale::scale(double value) const {
+    if (!std::isfinite(value)) {
+        throw std::invalid_argument("Invalid data value");
+    }
+
+    if (getMin() == getMax()) {
+        return 50.0;
+    }
+
+    return ((value - getMin()) /
+            (getMax() - getMin())) * 100.0;
+}
+
 }

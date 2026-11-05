@@ -29,6 +29,7 @@
 //
 // IMPLEMENTATION STATUS: NOT YET IMPLEMENTED
 // ============================================================================
+<<<<<<< HEAD
 #ifndef SCATTER_PLOT_H
 #define SCATTER_PLOT_H
 
@@ -49,3 +50,32 @@ public:
 };
 
 #endif // SCATTER_PLOT_H
+=======
+
+#ifndef DATAVIZ_SCATTER_PLOT_H
+#define DATAVIZ_SCATTER_PLOT_H
+
+#include "dataviz/Renderer.h"
+
+#include <vector>
+
+namespace dataviz {
+
+class ScatterPlot {
+private:
+    std::vector<double> xValues;
+    std::vector<double> yValues;
+
+public:
+    ScatterPlot(const std::vector<double>& x,
+                const std::vector<double>& y);
+
+    void draw(Renderer& renderer) const;
+
+    std::size_t pointCount() const;
+};
+
+}
+
+#endif
+>>>>>>> origin/main
