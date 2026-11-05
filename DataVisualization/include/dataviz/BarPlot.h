@@ -29,15 +29,15 @@
 //
 // IMPLEMENTATION STATUS: NOT YET IMPLEMENTED
 // ============================================================================
-#pragma once
+#ifndef BAR_PLOT_H
+#define BAR_PLOT_H
 
-#include "dataviz/DataTypes.h"
-#include "dataviz/PlotOptions.h"
+#include <string>
+#include <vector>
 #include "dataviz/AxisScale.h"
-#include "dataviz/Labels.h"
-#include "dataviz/Renderer.h"
+#include "dataviz/Plot.h"
 
-namespace dataviz {
+
 
 /**
  * BarPlot draws a category/value series as vertical bars.
@@ -49,24 +49,22 @@ namespace dataviz {
  * primitive operations (begin, line, rectangle, text, finish); see README.md
  * for the proposed contract used by this implementation.
  */
-class BarPlot {
+class BarPlot : public Plot {
+private:
+    std::vector<std::string> categories;
+    std::vector<double> values;
+
 public:
-    /**
-     * Draw a vertical bar chart.
-     *
-     * @param series One category and one numeric value per bar.
-     * @param options Canvas size, margins, title, labels and colours.
-     * @param axis Shared value-axis scaler, responsible for value range and
-     *             conversion of values to drawing coordinates.
-     * @param labels Shared label helper for title, axes and category labels.
-     * @param renderer Shared renderer that draws primitives and exports SVG.
-     * @return true when the chart is drawn; false for invalid/empty input.
-     */
-    static bool draw(const CategorySeries& series,
-                     const PlotOptions& options,
-                     AxisScale& axis,
-                     Labels& labels,
-                     Renderer& renderer);
+// Constructor to initialize the bar plot with a title
+    BarPlot(const std::string& plotTitle);
+
+    void addBar(const std::string& category, double value);
+    void renderAscii(int terminalWidth = 50) const;// Render a simple ASCII representation of the bar plot in the terminal.
+
+    // Getters for integration
+    const std::vector<std::string>& getCategories() const { return categories; }
+    const std::vector<double>& getValues() const { return values; }
 };
 
-} // namespace dataviz
+#endif // BAR_PLOT_H
+ // namespace dataviz

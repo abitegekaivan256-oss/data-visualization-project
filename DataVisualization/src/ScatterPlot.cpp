@@ -29,7 +29,6 @@
 //
 // IMPLEMENTATION STATUS: NOT YET IMPLEMENTED
 // ============================================================================
-
 // ============================================================
 // DATA VISUALIZATION LIBRARY IN C++
 // MODULE: SCATTER PLOT
@@ -125,3 +124,4 @@ void ScatterPlot::draw(Renderer& renderer) const {
 }
 
 }
+>>>>>>> origin/main

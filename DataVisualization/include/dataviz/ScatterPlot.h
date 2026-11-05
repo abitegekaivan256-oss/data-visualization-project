@@ -29,6 +29,28 @@
 //
 // IMPLEMENTATION STATUS: NOT YET IMPLEMENTED
 // ============================================================================
+<<<<<<< HEAD
+#ifndef SCATTER_PLOT_H
+#define SCATTER_PLOT_H
+
+#include "dataviz/Plot.h"
+#include <vector>
+#include <utility>
+
+class ScatterPlot : public Plot {
+private:
+    std::vector<std::pair<double, double>> points;
+    char pointMarker;
+
+public:
+    ScatterPlot(const std::string& plotTitle, char marker = '*');
+
+    void addPoint(double x, double y);
+    void renderAscii(int gridWidth = 40, int gridHeight = 15) const;
+};
+
+#endif // SCATTER_PLOT_H
+=======
 
 #ifndef DATAVIZ_SCATTER_PLOT_H
 #define DATAVIZ_SCATTER_PLOT_H
@@ -56,3 +78,4 @@ public:
 }
 
 #endif
+>>>>>>> origin/main

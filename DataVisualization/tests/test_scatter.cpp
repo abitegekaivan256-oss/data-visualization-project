@@ -7,7 +7,6 @@
 #include "dataviz/Renderer.h"
 
 using namespace std;
-using namespace dataviz;
 
 int main() {
 
@@ -18,15 +17,15 @@ int main() {
     vector<double> y = {2, 4, 6, 8, 10};
 
     try {
-        ScatterPlot plot(x, y);
+        ScatterPlot plot(x, y, "Scatter Plot");
 
         cout << "Number of points: "
-             << plot.pointCount() << endl;
+               << x.size() << endl;
 
         // Test 2: Draw scatter plot
-        Renderer renderer(800, 600);
+        dataviz::Renderer renderer(800, 600);
 
-        plot.draw(renderer);
+        plot.render(renderer);
         renderer.saveSVG("scatter_demo.svg");
 
         cout << "Rendering successful!\n";
@@ -36,7 +35,7 @@ int main() {
         vector<double> emptyY;
 
         try {
-            ScatterPlot emptyPlot(emptyX, emptyY);
+            ScatterPlot emptyPlot(vector<double>{}, vector<double>{}, string("Empty Scatter Plot"));
             cout << "Empty dataset test failed!\n";
             return 1;
         }
@@ -49,7 +48,7 @@ int main() {
         vector<double> y2 = {4, 5};
 
         try {
-            ScatterPlot invalidPlot(x2, y2);
+            ScatterPlot invalidPlot(x2, y2, "Invalid Scatter Plot");
             cout << "Mismatched dataset test failed!\n";
             return 1;
         }
@@ -66,3 +65,4 @@ int main() {
 
     return 0;
 }
+
