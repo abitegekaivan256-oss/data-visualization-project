@@ -1,3 +1,4 @@
+#include <cassert>
 // ============================================================================
 // COMPONENT TEST PLACEHOLDER
 // MODULE: BAR PLOT
@@ -18,5 +19,7 @@ int main() {
     regionalSales.addBar("East", 210.0);
     regionalSales.renderAscii();
 
+    assert(regionalSales.getValues().size() == 3);
+    assert(regionalSales.getValues()[2] == 210.0);
     return 0;
 }

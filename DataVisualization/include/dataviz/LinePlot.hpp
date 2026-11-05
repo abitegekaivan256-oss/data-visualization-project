@@ -2,27 +2,25 @@
 #ifndef DATAVIZ_LINEPLOT_HPP
 #define DATAVIZ_LINEPLOT_HPP
 
+#include "dataviz/Plot.h"
 #include <cstddef>
 #include <string>
 #include <vector>
 
 namespace dataviz {
 
-struct Point {
-    double x;
-    double y;
-};
+
 
 struct LineSegment {
     Point start;
     Point end;
 };
 
-// Standalone component until the team defines
-// Plot, AxisScale and Renderer interfaces.
-class LinePlot {
+// Line graph using shared Plot metadata.
+class LinePlot:public Plot {
 public:
-    LinePlot() = default;
+    LinePlot() : Plot("Line Plot") {}
+    void render(Renderer&)const override;
 
     LinePlot(const std::vector<double>& x,
              const std::vector<double>& y);
@@ -31,9 +29,9 @@ public:
     void setData(const std::vector<double>& x,
                  const std::vector<double>& y);
 
-    void setTitle(const std::string& title);
-    void setXLabel(const std::string& label);
-    void setYLabel(const std::string& label);
+
+
+
 
     std::size_t size() const noexcept;
 
@@ -48,9 +46,9 @@ private:
     std::vector<double> x_values_;
     std::vector<double> y_values_;
 
-    std::string title_ = "Line Plot";
-    std::string x_label_ = "X";
-    std::string y_label_ = "Y";
+
+
+
 };
 
 } // namespace dataviz
