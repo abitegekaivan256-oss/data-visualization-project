@@ -202,3 +202,4 @@ void Renderer::drawOutlinedPoint(double x, double y, double radius,
                         number(outlineWidth) + "\"/>");
 }
 }
+ 
