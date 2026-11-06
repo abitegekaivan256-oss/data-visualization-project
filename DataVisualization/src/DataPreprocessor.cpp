@@ -23,7 +23,8 @@ using namespace std;
 
 // Base class
 class DataPreprocessor {
-private:   vector<double> data;
+private:   
+vector<double> data;
 
 public:
     void setData(vector<double> values) 
