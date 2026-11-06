@@ -1,28 +1,55 @@
-// ============================================================================
-// DATA VISUALIZATION LIBRARY IN C++
-//
-// MODULE: STATISTICAL SUMMARIES
-// ASSIGNED TO: GLADYS
-//
-// YOUR RESPONSIBILITIES:
-// 1. Compute agreed summaries such as count, minimum, maximum, mean and median.
-// 2. Accept clean numerical data.
-// 3. Return results in a reusable form.
-//
-// MAIN FILES:
-// - include/dataviz/Statistics.h
-// - src/Statistics.cpp
-// - tests/test_statistics.cpp
-//
-// DEPENDENCIES / COORDINATION:
-// - DataPreprocessor (Gladys)
-//
-// TEAM RULES:
-// - Work mainly in your allocated files.
-// - Pull the latest repository before starting work.
-// - Discuss changes to shared interfaces before editing them.
-// - Compile/test your component before committing.
-// - Use a clear commit message describing what changed.
-//
-// IMPLEMENTATION STATUS: NOT YET IMPLEMENTED
-// ============================================================================
+#include <iostream>
+using namespace std;
+
+// Calculate sum
+template <typename T>
+double sum(T data[], int n) {
+    double total = 0;
+
+    for (int i = 0; i < n; i++) {
+        total += data[i];
+    }
+    return total;
+}
+
+// Calculate mean
+template <typename T>
+double mean(T data[], int n) {
+    return sum(data, n) / n;
+}
+
+// Find minimum
+template <typename T>
+T minimum(T data[], int n) {
+    T min = data[0];
+
+    for (int i = 1; i < n; i++) {
+        if (data[i] < min)
+            min = data[i];
+    }
+    return min;
+}
+
+// Find maximum
+template <typename T>
+T maximum(T data[], int n) {
+    T max = data[0];
+
+    for (int i = 1; i < n; i++) {
+        if (data[i] > max)
+            max = data[i];
+    }
+    return max;
+}
+
+int main() {
+    int data[] = {10, 20, 30, 40, 50};
+    int n = 5;
+
+    cout << "Sum: " << sum(data, n) << endl;
+    cout << "Mean: " << mean(data, n) << endl;
+    cout << "Minimum: " << minimum(data, n) << endl;
+    cout << "Maximum: " << maximum(data, n) << endl;
+
+    return 0;
+}

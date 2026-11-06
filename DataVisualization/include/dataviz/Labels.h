@@ -1,30 +1,18 @@
-// ============================================================================
-// DATA VISUALIZATION LIBRARY IN C++
-//
-// MODULE: LABELS AND ANNOTATIONS
-// ASSIGNED TO: IVAN
-//
-// YOUR RESPONSIBILITIES:
-// 1. Manage plot title and axis labels.
-// 2. Support tick labels and agreed annotations.
-// 3. Provide label information to Renderer.
-// 4. Help compile weekly reports in docs/weekly_reports.
-//
-// MAIN FILES:
-// - include/dataviz/Labels.h
-// - src/Labels.cpp
-// - tests/test_labels.cpp
-//
-// DEPENDENCIES / COORDINATION:
-// - Renderer (Adrian + Group)
-// - Plot (Group)
-//
-// TEAM RULES:
-// - Work mainly in your allocated files.
-// - Pull the latest repository before starting work.
-// - Discuss changes to shared interfaces before editing them.
-// - Compile/test your component before committing.
-// - Use a clear commit message describing what changed.
-//
-// IMPLEMENTATION STATUS: NOT YET IMPLEMENTED
-// ============================================================================
+#pragma once
+#include "dataviz/Renderer.h"
+namespace dataviz {
+class Label {
+std::string text_;
+public:
+explicit Label(std::string text):text_(text){}
+virtual ~Label()=default;
+const std::string& getText()const{return text_;}
+void setText(std::string text){text_=text;}
+virtual void render(Renderer& r,double x,double y)const{r.drawText(x,y,text_);}
+};
+class AxisLabel:public Label {public:using Label::Label;};
+class Annotation:public Label {
+public:using Label::Label;
+void render(Renderer& r,double x,double y)const override{r.drawPoint(x,y,3,"red");r.drawText(x+8,y-8,getText());}
+};
+}

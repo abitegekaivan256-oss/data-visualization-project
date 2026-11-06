@@ -1,0 +1,23 @@
+cmake_minimum_required(VERSION 3.16)
+
+project(DataVisualization VERSION 1.0 LANGUAGES CXX)
+
+# Use C++17
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# Create the Data Visualization Library
+add_library
+(dataviz STATIC
+    src/DataLoader.cpp
+    src/DataPreprocessor.cpp
+    src/Statistics.cpp
+    src/Plot.cpp
+    src/ScatterPlot.cpp
+    src/LinePlot.cpp
+    src/BarPlot.cpp
+    src/AxisScale.cpp
+    src/Renderer.cpp
+    src/Labels.cpp
+    src/ImageExporter.cpp
+)

@@ -1,27 +1,28 @@
-// ============================================================================
-// DATA VISUALIZATION LIBRARY IN C++
-//
-// MODULE: COMMON PLOT DESIGN / INTEGRATION
-// ASSIGNED TO: GROUP
-//
-// YOUR RESPONSIBILITIES:
-// 1. Define common plot information shared by plot types.
-// 2. Keep interfaces compatible across ScatterPlot, LinePlot and BarPlot.
-// 3. Coordinate changes before editing this shared module.
-//
-// MAIN FILES:
-// - include/dataviz/Plot.h
-// - src/Plot.cpp
-//
-// DEPENDENCIES / COORDINATION:
-// - All plotting modules
-//
-// TEAM RULES:
-// - Work mainly in your allocated files.
-// - Pull the latest repository before starting work.
-// - Discuss changes to shared interfaces before editing them.
-// - Compile/test your component before committing.
-// - Use a clear commit message describing what changed.
-//
-// IMPLEMENTATION STATUS: NOT YET IMPLEMENTED
-// ============================================================================
+#pragma once
+#include <string>
+#include "dataviz/Renderer.h"
+
+// Common metadata and rendering contract for all plots.
+class Plot {
+protected:
+    std::string title;
+    std::string xAxisLabel = "X";
+    std::string yAxisLabel = "Y";
+public:
+    explicit Plot(const std::string& name = "Plot") : title(name) {}
+    virtual ~Plot() = default;
+    virtual void render(dataviz::Renderer&) const = 0;
+    // Compatibility hook. Data export requires a derived override.
+    virtual void exportData() const {}
+    void setTitle(const std::string& value) { title = value; }
+    void setXLabel(const std::string& value) { xAxisLabel = value; }
+    void setYLabel(const std::string& value) { yAxisLabel = value; }
+    void setAxisLabels(const std::string& x, const std::string& y) {
+        setXLabel(x);
+        setYLabel(y);
+    }
+    std::string getTitle() const { return title; }
+    std::string getXAxisLabel() const { return xAxisLabel; }
+    std::string getYAxisLabel() const { return yAxisLabel; }
+};
+namespace dataviz { using Plot = ::Plot; }

@@ -1,31 +1,23 @@
-// ============================================================================
-// DATA VISUALIZATION LIBRARY IN C++
-//
-// MODULE: SCATTER PLOT
-// ASSIGNED TO: ADRIAN
-//
-// YOUR RESPONSIBILITIES:
-// 1. Accept x and y datasets.
-// 2. Use AxisScale to map data to plot coordinates.
-// 3. Represent each observation as a point.
-// 4. Pass drawing requirements to Renderer.
-//
-// MAIN FILES:
-// - include/dataviz/ScatterPlot.h
-// - src/ScatterPlot.cpp
-// - tests/test_scatter.cpp
-//
-// DEPENDENCIES / COORDINATION:
-// - AxisScale (Bonius)
-// - Renderer (Adrian + Group)
-// - Plot (Group)
-//
-// TEAM RULES:
-// - Work mainly in your allocated files.
-// - Pull the latest repository before starting work.
-// - Discuss changes to shared interfaces before editing them.
-// - Compile/test your component before committing.
-// - Use a clear commit message describing what changed.
-//
-// IMPLEMENTATION STATUS: NOT YET IMPLEMENTED
-// ============================================================================
+#pragma once
+#include "dataviz/Plot.h"
+
+namespace dataviz {
+class ScatterPlot : public Plot {
+    std::vector<double> xValues, yValues;
+    char marker_ = '*'; // ASCII only; SVG uses filled circles.
+    double markerRadius_ = 5.0;
+public:
+    ScatterPlot(const std::vector<double>& x, const std::vector<double>& y,
+                const std::string& name = "Scatter Plot", char marker = '*');
+    explicit ScatterPlot(const std::string& name, char marker = '*');
+    char getMarker() const { return marker_; }
+    void setMarkerRadius(double radius);
+    double getMarkerRadius() const { return markerRadius_; }
+    void addPoint(double x, double y);
+    void renderAscii(int width = 40, int height = 15) const;
+    std::size_t pointCount() const;
+    void draw(Renderer&) const;
+    void render(Renderer& renderer) const override { draw(renderer); }
+};
+}
+using ScatterPlot = dataviz::ScatterPlot;
