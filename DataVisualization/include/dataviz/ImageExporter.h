@@ -27,44 +27,58 @@
 #ifndef DATAVIZ_IMAGE_EXPORTER_H
 #define DATAVIZ_IMAGE_EXPORTER_H
 
+// string stores filenames and the last diagnostic message.
 #include <string>
 
 namespace dataviz {
 
+// A forward declaration is sufficient for references in these declarations.
+// The implementation includes Renderer.h when it calls its methods.
 class Renderer;
 
+// Abstract export contract. A derived strategy decides how to save a drawing;
+// only the SVG strategy is implemented in this project.
 class ExportStrategy {
-public:
+  public:
+    // A virtual destructor makes destruction through a base pointer safe. No
+    // manual cleanup is needed here because the base owns no resources.
     virtual ~ExportStrategy() = default;
 
-    virtual bool exportPlot(
-        const Renderer& renderer,
-        const std::string& filename
-    ) = 0;
+    // renderer is read-only drawing content; filename is the destination path.
+    // Return true only on successful export. =0 makes this a pure virtual
+    // operation, so ExportStrategy itself cannot be instantiated.
+    virtual bool exportPlot(const Renderer &renderer, const std::string &filename) = 0;
 };
 
+// Public inheritance permits this concrete object to be used through an
+// ExportStrategy reference. override asks the compiler to check the virtual signature.
 class SvgImageExporter : public ExportStrategy {
-private:
+  private:
+    // Encapsulation: callers read errors through lastError(), not direct writes.
     std::string lastError_;
 
-protected:
-    bool preparePath(const std::string& filename);
+  protected:
+    // Protected helper validates the name/suffix and records a failure reason.
+    // It does not create directories or check all filesystem permissions.
+    bool preparePath(const std::string &filename);
 
-public:
-    bool exportPlot(
-        const Renderer& renderer,
-        const std::string& filename
-    ) override;
+  public:
+    // Clear old errors, validate the path, and ask Renderer to write its SVG.
+    // False reports a failed path/write; standard exceptions become diagnostics.
+    bool exportPlot(const Renderer &renderer, const std::string &filename) override;
 
-    const std::string& lastError() const;
+    // Read without copying or exposing mutation. The returned reference is
+    // valid only while this exporter exists, and a new export may change it.
+    const std::string &lastError() const;
 };
 
+// Convenience utility for callers needing only success/failure. No stored
+// state or custom constructor/destructor is required for this static entry point.
 class ImageExporter {
-public:
-    static bool exportSVG(
-        const Renderer& renderer,
-        const std::string& filename
-    );
+  public:
+    // Delegate to a temporary SvgImageExporter. For detailed errors, create a
+    // named SvgImageExporter and read its lastError() instead.
+    static bool exportSVG(const Renderer &renderer, const std::string &filename);
 };
 
 } // namespace dataviz
