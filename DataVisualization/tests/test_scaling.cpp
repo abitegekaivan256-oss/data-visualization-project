@@ -1,3 +1,4 @@
+#include <cassert>
 
 #include <iostream>
 #include "dataviz/AxisScale.h"
@@ -47,5 +48,8 @@ int main() {
 
     cout << "\nAll AxisScale examples completed!\n";
 
+    assert(linear.scale(50) == 250);
+    assert(percentage.scale(50) == 50);
+    assert(equalScale.scale(10) == 250);
     return 0;
 }

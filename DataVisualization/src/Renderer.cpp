@@ -27,7 +27,6 @@
 // - Compile/test your component before committing.
 // - Use a clear commit message describing what changed.
 //
-// IMPLEMENTATION STATUS: NOT YET IMPLEMENTED
 // ============================================================================
 #include "dataviz/Renderer.h"
 
@@ -157,3 +156,49 @@ bool Renderer::saveSVG(const std::string& filename) const {
     return static_cast<bool>(out);
 }
 } // namespace dataviz
+#include <iomanip>
+#include <locale>
+namespace dataviz {
+void Renderer::drawNumericTicks(double left, double top, double right, double bottom,
+                                double xmin, double xmax, double ymin, double ymax,
+                                bool includeX) {
+    if (!finite(xmin) || !finite(xmax) || !finite(ymin) || !finite(ymax) ||
+        xmin > xmax || ymin > ymax || !(left < right && top < bottom))
+        throw std::invalid_argument("Invalid tick range");
+    const auto label = [](double value) {
+        std::ostringstream out;
+        out.imbue(std::locale::classic());
+        out << std::setprecision(4) << value;
+        return out.str();
+    };
+    for (int i = 0; i <= 5; ++i) {
+        const double f = i / 5.0;
+        if (includeX && (xmin != xmax || i == 0)) {
+            const double pos = xmin == xmax ? .5 : f;
+            const double x = left + pos * (right - left);
+            drawLine(x, bottom, x, bottom + 4, "#64748b", 1);
+            drawText(x - 10, bottom + 20, label((1-pos)*xmin + pos*xmax), 11);
+        }
+        if (ymin != ymax || i == 0) {
+            const double pos = ymin == ymax ? .5 : f;
+            const double y = bottom - pos * (bottom - top);
+            drawLine(left - 4, y, left, y, "#64748b", 1);
+            drawText(8, y + 4, label((1-pos)*ymin + pos*ymax), 11);
+        }
+    }
+}
+}
+
+namespace dataviz {
+void Renderer::drawOutlinedPoint(double x, double y, double radius,
+                                 const std::string& fill, const std::string& outline,
+                                 double outlineWidth) {
+    if (!finite(x) || !finite(y) || !finite(radius) || radius <= 0 ||
+        !finite(outlineWidth) || outlineWidth <= 0)
+        throw std::invalid_argument("Invalid outlined point");
+    elements_.push_back("<circle cx=\"" + number(x) + "\" cy=\"" + number(y) +
+                        "\" r=\"" + number(radius) + "\" fill=\"" + escapeXML(fill) +
+                        "\" stroke=\"" + escapeXML(outline) + "\" stroke-width=\"" +
+                        number(outlineWidth) + "\"/>");
+}
+}

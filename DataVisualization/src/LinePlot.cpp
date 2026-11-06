@@ -25,7 +25,7 @@ std::string escapeXml(const std::string& value) {
 }
 } // namespace
 
-LinePlot::LinePlot(const std::vector<double>& x, const std::vector<double>& y) {
+LinePlot::LinePlot(const std::vector<double>& x, const std::vector<double>& y) : Plot("Line Plot") {
     setData(x, y);
 }
 
@@ -42,9 +42,6 @@ void LinePlot::setData(const std::vector<double>& x, const std::vector<double>& 
     y_values_ = y;
 }
 
-void LinePlot::setTitle(const std::string& title) { title_ = title; }
-void LinePlot::setXLabel(const std::string& label) { x_label_ = label; }
-void LinePlot::setYLabel(const std::string& label) { y_label_ = label; }
 std::size_t LinePlot::size() const noexcept { return x_values_.size(); }
 
 std::vector<LineSegment> LinePlot::segments() const {
@@ -101,12 +98,12 @@ void LinePlot::saveSvg(const std::string& filename, unsigned width, unsigned hei
     }
     out << "</g>\n<g font-family=\"Arial,sans-serif\" fill=\"#0f172a\">\n";
     out << "<text x=\"" << width / 2 << "\" y=\"30\" text-anchor=\"middle\" font-size=\"20\" font-weight=\"bold\">"
-        << escapeXml(title_) << "</text>\n";
+        << escapeXml(title) << "</text>\n";
     out << "<text x=\"" << width / 2 << "\" y=\"" << height - 15
-        << "\" text-anchor=\"middle\" font-size=\"14\">" << escapeXml(x_label_) << "</text>\n";
+        << "\" text-anchor=\"middle\" font-size=\"14\">" << escapeXml(xAxisLabel) << "</text>\n";
     out << "<text transform=\"translate(20 " << height / 2
         << ") rotate(-90)\" text-anchor=\"middle\" font-size=\"14\">"
-        << escapeXml(y_label_) << "</text>\n</g>\n";
+        << escapeXml(yAxisLabel) << "</text>\n</g>\n";
     out << "<polyline fill=\"none\" stroke=\"#2563eb\" stroke-width=\"2.5\" points=\"";
     for (std::size_t i = 0; i < size(); ++i) {
         out << xpix(x_values_[i]) << ',' << ypix(y_values_[i]) << ' ';
@@ -121,3 +118,29 @@ void LinePlot::saveSvg(const std::string& filename, unsigned width, unsigned hei
 }
 
 } // namespace dataviz
+
+#include "dataviz/AxisScale.h"
+
+namespace dataviz {
+void LinePlot::render(Renderer& renderer) const {
+    if (size() == 0) throw std::invalid_argument("Empty line plot");
+    const auto xr = std::minmax_element(x_values_.begin(), x_values_.end());
+    const auto yr = std::minmax_element(y_values_.begin(), y_values_.end());
+    const double right = renderer.width() - 40, bottom = renderer.height() - 80;
+    LinearScale xs(*xr.first, *xr.second, right - 80);
+    LinearScale ys(*yr.first, *yr.second, bottom - 60);
+    std::vector<Point> points;
+    for (std::size_t i = 0; i < size(); ++i) {
+        points.push_back({80 + xs.scale(x_values_[i]),
+                          bottom - ys.scale(y_values_[i])});
+    }
+    renderer.drawAxes(80, 60, right, bottom);
+    renderer.drawNumericTicks(80, 60, right, bottom, *xr.first, *xr.second,
+                              *yr.first, *yr.second);
+    renderer.drawText(80, 30, title, 22);
+    renderer.drawText(80, renderer.height() - 20, xAxisLabel);
+    renderer.drawText(5, 35, yAxisLabel);
+    renderer.drawPolyline(points);
+    renderer.drawScatter(points);
+}
+}

@@ -2,6 +2,7 @@
 1. PROJECT NAME AND DESCRIPTION
 1.1 Project Name
 Data Visualization Library in C++
+
 Description
 The Data Visualization Library is a C++ software project designed to provide reusable components for processing, analyzing, and visualizing numerical data. The project aims to simplify the process of converting numerical datasets into graphical representations.
 It combines several modules, including data loading, data preprocessing, statistical analysis, graph generation, axis scaling, rendering, labels and annotations, and image export. The library is organized using object-oriented programming principles to improve code organization, reusability, maintainability, and extensibility.
@@ -443,6 +444,8 @@ The project demonstrates how a larger software system can be divided into smalle
 It also provides opportunities to apply important C++ concepts, including classes, objects, encapsulation, inheritance, polymorphism, templates, file handling, and modular programming.
 
 The project contains source files, public headers, tests, examples, and documentation covering its major components.
+
 Before final submission, the group must verify successful integration, complete the required build configuration, run the full test suite, and ensure that the README accurately describes the working implementation.
+
 The overall objective is to produce a reusable, understandable, and maintainable C++ library while demonstrating effective collaboration and sound software development practices.
 

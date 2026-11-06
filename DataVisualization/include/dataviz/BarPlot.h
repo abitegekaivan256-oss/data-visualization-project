@@ -27,7 +27,6 @@
 // - Compile/test your component before committing.
 // - Use a clear commit message describing what changed.
 //
-// IMPLEMENTATION STATUS: NOT YET IMPLEMENTED
 // ============================================================================
 #ifndef BAR_PLOT_H
 #define BAR_PLOT_H
@@ -39,16 +38,7 @@
 
 
 
-/**
- * BarPlot draws a category/value series as vertical bars.
- *
- * Integration note:
- * This module follows the workflow's intended dependencies. The group must
- * agree the exact method names/signatures in AxisScale, Labels, Renderer and
- * PlotOptions before merging. The method below uses the shared renderer's
- * primitive operations (begin, line, rectangle, text, finish); see README.md
- * for the proposed contract used by this implementation.
- */
+// Category/value plot with signed ASCII and SVG rendering.
 class BarPlot : public Plot {
 private:
     std::vector<std::string> categories;
@@ -58,6 +48,7 @@ public:
 // Constructor to initialize the bar plot with a title
     BarPlot(const std::string& plotTitle);
 
+    void render(dataviz::Renderer&) const override;
     void addBar(const std::string& category, double value);
     void renderAscii(int terminalWidth = 50) const;// Render a simple ASCII representation of the bar plot in the terminal.
 
@@ -67,4 +58,3 @@ public:
 };
 
 #endif // BAR_PLOT_H
- // namespace dataviz
