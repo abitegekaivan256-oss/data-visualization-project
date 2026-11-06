@@ -1,5 +1,6 @@
 // Match the production declaration; this file does not implement the legacy
-// MissingValuePreprocessor/InvalidValuePreprocessor teaching hierarchy.
+// MissingValuePreprocessor/InvalidValuePreprocessor teaching hierarchy in
+// examples/teaching/data_preprocessor_inheritance.cpp.
 #include "dataviz/DataPreprocessor.h"
 // isfinite rejects NaN/infinity before statistics or coordinate mapping.
 #include <cmath>
@@ -20,7 +21,8 @@ DataPreprocessor::numericPairs(const DataSet &d, std::size_t x, std::size_t y,
     // Each iteration represents one observation, not one independent coordinate.
     for (std::size_t i = 0; i < d.rowCount(); ++i) {
         try {
-            // numericValue rejects missing/non-numeric text and requires full conversion.
+            // Read numeric values from columns x and y. numericValue rejects
+            // missing/non-numeric text and requires full conversion.
             double a = d.numericValue(i, x), b = d.numericValue(i, y);
             // Conversion can accept strings such as nan/inf; finite checks reject those.
             if (!std::isfinite(a) || !std::isfinite(b))
@@ -35,6 +37,7 @@ DataPreprocessor::numericPairs(const DataSet &d, std::size_t x, std::size_t y,
                 throw;
         }
     }
+    // Return the two vectors containing valid numeric pairs.
     // Empty/all-dropped input legitimately returns two empty vectors; plot or
     // statistics operations apply their own nonempty-data requirements later.
     return result;

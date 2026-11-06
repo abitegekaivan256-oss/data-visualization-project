@@ -1,12 +1,13 @@
 # Current C++17 library structure and usage
 
-This guide applies to the `build-fix` working version reorganized on 2026-11-06. See the [structure repair report](docs/STRUCTURE_REPAIR_REPORT.md) for the final directory tree, file moves, build evidence, individual test results and Windows security diagnostics. The [earlier commenting report](docs/COMMENTING_REVIEW_REPORT.md) records the preceding review; its paths and test results describe that earlier state. The original group README is retained below.
+This guide applies to the local `integration-final` version integrating the verified `build-fix` branch with `origin/main`. See the [final integration report](docs/FINAL_INTEGRATION_REPORT.md) for the merged revisions, conflict decisions and current verification results. The [structure repair report](docs/STRUCTURE_REPAIR_REPORT.md) and [commenting report](docs/COMMENTING_REVIEW_REPORT.md) retain the preceding file moves and test evidence; their paths and results describe those earlier states. The original group README is retained below.
 
 The implemented workflow is CSV → paired finite numerical data → statistics and three plots → labels/annotations → SVG export. Export supports SVG; PNG/JPEG export and custom plot-scale injection are not implemented.
 
 ## Production code and teaching examples
 
 - `include/dataviz/` contains reusable public `.h` and `.hpp` interfaces. Production preprocessing is declared in `DataPreprocessor.h`; the `Statistics::summarize` template remains in `Statistics.h`, where clients can instantiate it. Production SVG labels are defined inline in `Labels.h`.
+- `Point.hpp` contains the single shared `dataviz::Point` definition. Renderer and LinePlot use this same two-coordinate value type. LinePlot continues to use Plot's title and axis-label state through its inherited setters and getters.
 - `src/` contains all eleven production translation units. `Labels.cpp` and `Statistics.cpp` include their production headers without defining application entry points.
 - `examples/teaching/` contains the eight relocated standalone lessons. Each has its own `main()` and separate executable target. Both historical Labels copies have distinct filenames to preserve their original locations; they do not implement the production SVG label API.
 - `examples/` also retains the existing library demonstrations and the distinct double-array `legacy_statistics.cpp` lesson. `examples/main.cpp` is the integrated CSV demonstration.
@@ -16,30 +17,30 @@ The explanatory comments and group contributions are retained. The active build 
 
 ## Configure, build and test
 
-The verification tools are GCC 16.2.0 and CMake 4.4.5. A separate `build/structure-repair` directory verifies the corrected source lists from a clean configuration. Run these commands in PowerShell:
+The verification tools are GCC 16.2.0 and CMake 4.4.5. A separate `build/integration-final` directory verifies the integrated sources from a clean configuration. Run these commands in PowerShell:
 
 ```powershell
 $project = 'C:\Users\GLADYS\Documents\DataVisualization_Final_Integration'
-$build = "$project\build\structure-repair"
+$build = "$project\build\integration-final"
 $env:PATH = 'C:\msys64\ucrt64\bin;' + $env:PATH
 & 'C:\Program Files\CMake\bin\cmake.exe' -S $project -B $build -G Ninja '-DCMAKE_BUILD_TYPE=Debug' '-DCMAKE_CXX_COMPILER=C:/msys64/ucrt64/bin/g++.exe' '-DCMAKE_MAKE_PROGRAM=C:/PROGRA~1/MATLAB/R2025b/toolbox/shared/coder/ninja/win64/ninja.exe' '-DCMAKE_EXPORT_COMPILE_COMMANDS=ON'
 & 'C:\Program Files\CMake\bin\cmake.exe' --build $build --parallel 4
 & 'C:\Program Files\CMake\bin\ctest.exe' --test-dir $build --output-on-failure
 ```
 
-The compiler runtime directory on `PATH` supplies the GCC runtime DLLs. It does not override Windows Application Control. If Windows prevents an executable from starting, record the native error and report the test as BLOCKED. An administrator must determine the approved policy, signing process or testing environment. Do not disable security or rename programs to evade restrictions. The structure report gives the actual results for this build rather than assuming the earlier 11-PASS/2-BLOCKED result still applies.
+The compiler runtime directory on `PATH` supplies the GCC runtime DLLs. It does not override Windows Application Control. If Windows prevents an executable from starting, record the native error and report the test as BLOCKED. An administrator must determine the approved policy, signing process or testing environment. Do not disable security or rename programs to evade restrictions. The final integration report gives the actual results for this build; historical test results are retained in the earlier reports.
 
 ## Run the CSV-to-SVG demonstration
 
 The demo requires an existing output directory. Use a directory reserved for this demonstration:
 
 ```powershell
-$demoOutput = "$build\structure-review-demo"
+$demoOutput = "$build\integration-demo"
 New-Item -ItemType Directory -Force -Path $demoOutput | Out-Null
 & "$build\DataVisualization\csv_demo.exe" "$project\DataVisualization\data\demo.csv" $demoOutput
 ```
 
-The expected result for `demo.csv` is `Rows: 5 Mean: 2.4 Median: 3 Population variance: 7.44`, with `scatter.svg`, `bar.svg` and `line.svg` exported into that directory. The separate `sample.csv` contains different values. The structure report records the independently observed output and SVG verification.
+The expected result for `demo.csv` is `Rows: 5 Mean: 2.4 Median: 3 Population variance: 7.44`, with `scatter.svg`, `bar.svg` and `line.svg` exported into that directory. The separate `sample.csv` contains different values. The final integration report records the independently observed output and SVG verification.
 
 Scatter SVG markers are filled blue circles with a dark outline and a configurable radius (default 5 pixels); the configured character is used for ASCII output. Signed bars include a visible, labeled zero baseline. Line plots preserve input order. Production `Plot::exportData()` remains a no-op extension hook, not a data-file exporter.
 

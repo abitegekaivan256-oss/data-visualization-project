@@ -1,9 +1,10 @@
 // Production SVG label interface. The separate terminal teaching programs are
 // examples/teaching/labels_include_demo.cpp and labels_src_demo.cpp.
-#pragma once
+#pragma once // Prevents this header from being included more than once.
 // Renderer supplies string and SVG drawing operations used by inline methods.
 #include "dataviz/Renderer.h"
 namespace dataviz {
+// Base class for general text labels in data visualization.
 // Encapsulate reusable text with a virtual drawing operation. This class is
 // concrete: its default render draws plain text at caller-supplied pixels.
 class Label {
@@ -39,7 +40,8 @@ class Label {
         r.drawText(x, y, text_);
     }
 };
-// Public inheritance reuses Label's interface and ordinary text rendering.
+// Derived class for labeling graph axes. Public inheritance reuses Label's
+// interface and ordinary text rendering.
 // It does not automatically position or rotate axis text. using reuses the
 // base constructors instead of duplicating their initialization code.
 class AxisLabel : public Label {
@@ -50,6 +52,7 @@ class AxisLabel : public Label {
 // referring to an Annotation uses this override through runtime polymorphism.
 class Annotation : public Label {
   public:
+    // Inherit the base class constructors to initialize the annotation text.
     using Label::Label;
     // Draw a radius-three red point at (x,y), then position the annotation
     // eight pixels right and eight pixels up. override checks the signature

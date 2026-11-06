@@ -31,19 +31,15 @@
 #ifndef DATAVIZ_RENDERER_H
 #define DATAVIZ_RENDERER_H
 
+// Keep the shared coordinate type available to code that includes Renderer.h.
+#include "dataviz/Point.hpp"
+
 // string stores SVG fragments, labels and color values.
 #include <string>
 // vector keeps drawing elements in their original drawing order.
 #include <vector>
 
 namespace dataviz {
-
-// A simple value type for an X/Y coordinate. Public fields make geometry
-// easy to pass between plots and the renderer; this type owns no resources.
-struct Point {
-    double x;
-    double y;
-};
 
 // Concrete SVG drawing service. Plots calculate pixel positions and call
 // these public primitives. Private canvas dimensions and SVG strings are

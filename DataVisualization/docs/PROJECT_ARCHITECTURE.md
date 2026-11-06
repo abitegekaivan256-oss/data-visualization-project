@@ -1,6 +1,6 @@
 # Current Project Architecture
 
-The reusable library and standalone teaching programs have separate roles. See [the structure repair report](STRUCTURE_REPAIR_REPORT.md) for the exact moved-file inventory and final verification results.
+The reusable library and standalone teaching programs have separate roles. See [the final integration report](FINAL_INTEGRATION_REPORT.md) for the merged revisions and current verification results. The earlier [structure repair report](STRUCTURE_REPAIR_REPORT.md) retains the moved-file inventory and its original evidence.
 
 ## Data and rendering workflow
 
@@ -54,6 +54,8 @@ Renderer collects drawing elements and escapes XML text. `Annotation::render` ad
 | Module `CMakeLists.txt` | Lists production sources, independent executable targets and all thirteen tests. |
 
 Production `Statistics::summarize` is a member-function template in `Statistics.h`. Production SVG Label, AxisLabel and Annotation methods are inline in `Labels.h`. Their `.cpp` files are header-including production translation units. The earlier array-statistics and terminal-label programs live under `examples/teaching/` with their own entry points.
+
+`Point.hpp` defines the shared `dataviz::Point` aggregate once. Renderer includes that header so existing clients including Renderer still see Point, and LinePlot uses the same type for segment endpoints. LinePlot owns only its coordinate vectors; Plot continues to own the title and axis labels, keeping inherited setters, getters and both SVG paths consistent.
 
 ## Actual object-oriented relationships
 
