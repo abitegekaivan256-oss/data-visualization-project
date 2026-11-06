@@ -31,30 +31,44 @@
 #ifndef BAR_PLOT_H
 #define BAR_PLOT_H
 
+// string stores category/metadata text, vector owns the series, and the project
+// headers supply scaling and the common polymorphic Plot interface.
 #include <string>
 #include <vector>
 #include "dataviz/AxisScale.h"
 #include "dataviz/Plot.h"
 
-
-
 // Category/value plot with signed ASCII and SVG rendering.
 class BarPlot : public Plot {
-private:
+    // Encapsulation keeps the category/value series under this class's control.
+    // Elements with the same index describe the same bar.
+  private:
     std::vector<std::string> categories;
     std::vector<double> values;
 
-public:
-// Constructor to initialize the bar plot with a title
-    BarPlot(const std::string& plotTitle);
+  public:
+    // Constructor to initialize the bar plot with a title
+    // Initialize inherited metadata. Start empty and use addBar to build the series.
+    BarPlot(const std::string &plotTitle);
 
-    void render(dataviz::Renderer&) const override;
-    void addBar(const std::string& category, double value);
-    void renderAscii(int terminalWidth = 50) const;// Render a simple ASCII representation of the bar plot in the terminal.
+    // Map values, including zero, into SVG rectangles on an existing Renderer.
+    // Overrides Plot::render; empty series or invalid drawing geometry are errors.
+    void render(dataviz::Renderer &) const override;
+    // Append one category and finite value; reject NaN or infinity with invalid_argument.
+    void addBar(const std::string &category, double value);
+    // Print a signed character chart with a shared zero column. Width must be positive.
+    void renderAscii(int terminalWidth = 50)
+        const; // Render a simple ASCII representation of the bar plot in the terminal.
 
     // Getters for integration
-    const std::vector<std::string>& getCategories() const { return categories; }
-    const std::vector<double>& getValues() const { return values; }
+    // Const references avoid copying whole vectors and prevent mutation through these accessors.
+    // A returned reference remains valid only while the owning plot remains alive.
+    const std::vector<std::string> &getCategories() const {
+        return categories;
+    }
+    const std::vector<double> &getValues() const {
+        return values;
+    }
 };
 
 #endif // BAR_PLOT_H
