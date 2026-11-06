@@ -222,18 +222,14 @@ This allows the function to process arrays containing integers, floats, or doubl
 ## 6.3 Example of Template Usage
 
 Consider the following arrays:
-
-```cpp
 int numbers[] = {10, 20, 30, 40, 50};
 double decimals[] = {2.5, 4.5, 6.5, 8.5};
-```
+
 
 The same statistical function can be called for both arrays:
-
-```cpp
 sum(numbers, 5);
 sum(decimals, 4);
-```
+
 
 For the first call, the compiler uses `int` as the template type.
 
