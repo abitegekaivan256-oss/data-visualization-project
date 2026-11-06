@@ -1,163 +1,63 @@
-// ============================================================================
-// DATA VISUALIZATION LIBRARY IN C++
-//
-// MODULE: BAR PLOT
-// ASSIGNED TO: JEFF
-//
-// YOUR RESPONSIBILITIES:
-// 1. Accept categories/values.
-// 2. Determine bar positions, widths and heights.
-// 3. Use AxisScale where appropriate.
-// 4. Pass drawing requirements to Renderer.
-//
-// MAIN FILES:
-// - include/dataviz/BarPlot.h
-// - src/BarPlot.cpp
-// - tests/test_bar.cpp
-//
-// DEPENDENCIES / COORDINATION:
-// - AxisScale (Bonius)
-// - Renderer (Adrian + Group)
-// - Plot (Group)
-//
-// TEAM RULES:
-// - Work mainly in your allocated files.
-// - Pull the latest repository before starting work.
-// - Discuss changes to shared interfaces before editing them.
-// - Compile/test your component before committing.
-// - Use a clear commit message describing what changed.
-//
-// IMPLEMENTATION STATUS: NOT YET IMPLEMENTED
-// ============================================================================
 #include "dataviz/BarPlot.h"
-
 #include <algorithm>
 #include <cmath>
-#include <cstddef>
-#include <string>
+#include <iomanip>
+#include <iostream>
+#include <stdexcept>
 
-namespace dataviz {
+BarPlot::BarPlot(const std::string& name) : Plot(name) {}
 
-bool BarPlot::draw(const CategorySeries& series,
-                   const PlotOptions& options,
-                   AxisScale& axis,
-                   Labels& labels,
-                   Renderer& renderer)
-{
-    const std::size_t count = series.categories.size();
-
-    // A bar chart requires matching category/value entries and finite values.
-    if (count == 0 || series.values.size() != count) {
-        return false;
-    }
-
-    for (double value : series.values) {
-        if (!std::isfinite(value)) {
-            return false;
-        }
-    }
-
-    /*
-     * Proposed shared contract used here:
-     *   options.width, options.height
-     *   options.marginLeft, options.marginRight,
-     *   options.marginTop, options.marginBottom
-     *   options.title, options.xLabel, options.yLabel
-     *   options.backgroundColour, options.barColour,
-     *   options.axisColour, options.textColour
-     *
-     * AxisScale:
-     *   axis.configure(minValue, maxValue, pixelTop, pixelBottom)
-     *   axis.toPixel(value)
-     *
-     * Labels:
-     *   labels.drawTitle(renderer, text, x, y, colour)
-     *   labels.drawAxisLabel(renderer, text, x, y, colour)
-     *   labels.drawCategory(renderer, text, x, y, colour)
-     *
-     * Renderer:
-     *   begin(width, height, background); line(...); rectangle(...);
-     *   text(...); finish()
-     *
-     * Confirm these names with the team and adapt them to the final shared
-     * headers if their agreed API differs.
-     */
-    const double width = static_cast<double>(options.width);
-    const double height = static_cast<double>(options.height);
-    const double left = options.marginLeft;
-    const double right = width - options.marginRight;
-    const double top = options.marginTop;
-    const double bottom = height - options.marginBottom;
-
-    if (width <= 0 || height <= 0 || right <= left || bottom <= top) {
-        return false;
-    }
-
-    const auto limits = std::minmax_element(series.values.begin(),
-                                            series.values.end());
-    double minValue = std::min(0.0, *limits.first);
-    double maxValue = std::max(0.0, *limits.second);
-
-    // Avoid a zero-height value range when every value is zero.
-    if (std::abs(maxValue - minValue) < 1e-12) {
-        maxValue = 1.0;
-    }
-
-    axis.configure(minValue, maxValue, top, bottom);
-
-    renderer.begin(options.width, options.height, options.backgroundColour);
-
-    // Main axes. The value zero is the baseline, including for negative bars.
-    const double zeroY = axis.toPixel(0.0);
-    renderer.line(left, top, left, bottom, options.axisColour, 1.0);
-    renderer.line(left, zeroY, right, zeroY, options.axisColour, 1.0);
-
-    const double plotWidth = right - left;
-    const double slotWidth = plotWidth / static_cast<double>(count);
-    const double barWidth = slotWidth * 0.65;
-
-    for (std::size_t i = 0; i < count; ++i) {
-        const double centerX = left + (static_cast<double>(i) + 0.5) * slotWidth;
-        const double valueY = axis.toPixel(series.values[i]);
-        const double barTop = std::min(valueY, zeroY);
-        const double barHeight = std::abs(zeroY - valueY);
-
-        renderer.rectangle(centerX - barWidth / 2.0,
-                           barTop,
-                           barWidth,
-                           barHeight,
-                           options.barColour,
-                           options.barColour);
-
-        labels.drawCategory(renderer,
-                            series.categories[i],
-                            centerX,
-                            bottom + 18.0,
-                            options.textColour);
-    }
-
-    labels.drawTitle(renderer,
-                     options.title,
-                     (left + right) / 2.0,
-                     options.marginTop / 2.0,
-                     options.textColour);
-
-    labels.drawAxisLabel(renderer,
-                         options.xLabel,
-                         (left + right) / 2.0,
-                         height - 8.0,
-                         options.textColour);
-
-    // Place the y-axis label near the left margin; rotation may be added by
-    // the shared Labels implementation if it supports rotated text.
-    labels.drawAxisLabel(renderer,
-                         options.yLabel,
-                         options.marginLeft / 2.0,
-                         (top + bottom) / 2.0,
-                         options.textColour);
-
-    renderer.finish();
-    return true;
+void BarPlot::addBar(const std::string& category, double value) {
+    if (!std::isfinite(value)) throw std::invalid_argument("Bar must be finite");
+    categories.push_back(category);
+    values.push_back(value);
 }
 
-} // namespace dataviz
+void BarPlot::renderAscii(int width) const {
+    if (width <= 0) throw std::invalid_argument("Width must be positive");
+    std::cout << "\n=== Bar Plot: " << title << " ===\n";
+    if (values.empty()) {
+        std::cout << "[No data available]\n";
+        return;
+    }
+    const auto bounds = std::minmax_element(values.begin(), values.end());
+    const double lo = std::min(0.0, *bounds.first);
+    const double hi = std::max(0.0, *bounds.second);
+    dataviz::LinearScale scale(lo, hi, width);
+    const int zero = static_cast<int>(std::lround(scale.scale(0)));
+    for (std::size_t i = 0; i < values.size(); ++i) {
+        const int end = static_cast<int>(std::lround(scale.scale(values[i])));
+        std::string row(width + 1, ' ');
+        for (int j = std::min(zero, end); j <= std::max(zero, end); ++j)
+            row[j] = '#';
+        row[zero] = '|';
+        std::cout << std::setw(12) << std::left << categories[i] << " "
+                  << row << " (" << values[i] << ")\n";
+    }
+    std::cout << "| = zero\n";
+}
+
+void BarPlot::render(dataviz::Renderer& renderer) const {
+    if (values.empty()) throw std::invalid_argument("Empty bar plot");
+    const double bottom = renderer.height() - 80, right = renderer.width() - 40;
+    const auto bounds = std::minmax_element(values.begin(), values.end());
+    const double lo = std::min(0.0, *bounds.first), hi = std::max(0.0, *bounds.second);
+    dataviz::LinearScale scale(lo, hi, bottom - 60);
+    const double baseline = bottom - scale.scale(0);
+    const double slot = (right - 80) / values.size();
+    renderer.drawAxes(80, 60, right, bottom);
+    renderer.drawNumericTicks(80, 60, right, bottom, 0, 1, lo, hi, false);
+    renderer.drawText(80, 30, title, 22);
+    renderer.drawText(80, bottom + 60, xAxisLabel);
+    renderer.drawText(5, 35, yAxisLabel);
+    for (std::size_t i = 0; i < values.size(); ++i) {
+        const double x = 80 + (i + .5) * slot;
+        const double y = bottom - scale.scale(values[i]);
+        renderer.drawRectangle(x - slot * .3, std::min(y, baseline),
+                               slot * .6, std::abs(y - baseline));
+        renderer.drawText(x - slot * .3, bottom + 20, categories[i], 11);
+    }
+    // Draw last so the reference remains visible over every bar.
+    renderer.drawLine(80, baseline, right, baseline, "#475569", 1);
+    renderer.drawText(right - 50, baseline - 6, "0 (zero)", 11, "#475569");
+}

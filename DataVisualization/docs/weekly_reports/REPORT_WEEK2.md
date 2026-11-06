@@ -1,0 +1,42 @@
+# Weekly Progress Report — Week 2: Inheritance & Code Reuse
+
+## 1. Task Requirements
+* Implement a shared base class (`Plot`) to hold common plotting state and scaling instances.
+* Refactor concrete plot implementations (`BarPlot`, `ScatterPlot`, `LinePlot`) to inherit from `Plot`.
+* Create individual feature branches, document implementation strategies, and merge via PR.
+
+## 2. Implementation Strategy
+* **Base Class Abstraction:** Created `Plot.h` encapsulating title, axis labels (`xAxisLabel`, `yAxisLabel`), and coordinate transformations (`AxisScale`).
+* **Protected Encapsulation:** Declared shared data members with `protected` visibility so child classes access attributes cleanly without exposing them publicly.
+* **Constructor Delegation:** Derived constructors delegate title string initialization upward via standard C++ initializer lists (`: Plot(plotTitle)`).
+
+## 3. Testing & Integration Verification
+* Integrated `BarPlot` (Jeff) and `ScatterPlot` (Adrian) under the new inheritance layout.
+* Verified that updating parent parameters (e.g., `setAxisLabels()`) propagates to all derived rendering methods.
+
+## 4. Working Example (Inputs & Outputs)
+
+### Input Code (`examples/main.cpp`)
+```cpp
+#include "dataviz/BarPlot.h"
+#include "dataviz/ScatterPlot.h"
+
+int main() {
+    // 1. Test BarPlot Inheritance
+    BarPlot regionalSales("Q3 Regional Revenue");
+    regionalSales.setAxisLabels("Region", "Revenue ($k)");
+    regionalSales.addBar("North", 150.0);
+    regionalSales.addBar("South", 95.0);
+    regionalSales.addBar("East", 210.0);
+    regionalSales.renderAscii();
+
+    // 2. Test ScatterPlot Inheritance
+    ScatterPlot distribution("Height vs Weight", 'O');
+    distribution.setAxisLabels("Height (cm)", "Weight (kg)");
+    distribution.addPoint(160, 55);
+    distribution.addPoint(175, 70);
+    distribution.addPoint(180, 85);
+    distribution.renderAscii(30, 8);
+
+    return 0;
+}

@@ -2,10 +2,10 @@
 #ifndef DATAVIZ_LINEPLOT_HPP
 #define DATAVIZ_LINEPLOT_HPP
 
-// Include standard C++ libraries needed by this header.
-#include <cstddef>  // Provides std::size_t.
-#include <string>   // Provides std::string.
-#include <vector>   // Provides std::vector.
+#include "dataviz/Plot.h"
+#include <cstddef>
+#include <string>
+#include <vector>
 
 // Include the shared Point structure used by LinePlot and Renderer.
 #include "dataviz/Point.hpp"
@@ -19,12 +19,16 @@ struct LineSegment {
     Point end;    // Ending point of the line.
 };
 
-// Represents a line plot that stores data and generates an SVG graph.
-class LinePlot {
+// Line graph using shared Plot metadata.
+class LinePlot:public Plot {
 public:
+    LinePlot() : Plot("Line Plot") {}
+    void render(Renderer&)const override;
+   LinePlot(const std::vector<double>& x,
+             const std::vector<double>& y);
 
-    // Default constructor creates an empty line plot.
-    LinePlot() = default;
+    void setData(const std::vector<double>& x,
+                 const std::vector<double>& y);
 
     // Constructor that creates a line plot using X and Y coordinate values.
     LinePlot(const std::vector<double>& x,
