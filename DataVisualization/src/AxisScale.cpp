@@ -64,6 +64,7 @@ void AxisScale::setRange(double min, double max) {
 // LINEAR SCALE IMPLEMENTATION
 // Build the base range first, then the derived output-width member.
 // Nonpositive or nonfinite widths cannot represent a usable drawing distance.
+//constructor
 LinearScale::LinearScale(double min, double max, double width)
     : AxisScale(min, max), screenWidth(width) {
     if (!std::isfinite(width) || width <= 0) {
